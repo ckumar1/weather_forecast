@@ -64,7 +64,7 @@ Rails.application.configure do
 
   # Configure Geocoder for tests
   Geocoder.configure(
-    timeout: 5,
+    timeout: 15,
     lookup: :nominatim,
     use_https: true
   )
