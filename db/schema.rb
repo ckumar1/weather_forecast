@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_04_142606) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_04_143728) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,6 +37,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_04_142606) do
     t.decimal "longitude", precision: 10, scale: 6
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["latitude", "longitude"], name: "index_locations_on_latitude_and_longitude"
+    t.index ["state", "city"], name: "index_locations_on_state_and_city"
+    t.index ["zipcode"], name: "index_locations_on_zipcode"
   end
 
   add_foreign_key "forecasts", "locations"
