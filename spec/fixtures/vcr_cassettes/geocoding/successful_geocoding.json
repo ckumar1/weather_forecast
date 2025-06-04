@@ -1,0 +1,109 @@
+{
+  "http_interactions": [
+    {
+      "request": {
+        "method": "get",
+        "uri": "https://nominatim.openstreetmap.org/search?accept-language=en&addressdetails=1&format=json&q=Cupertino,%20CA",
+        "body": {
+          "encoding": "US-ASCII",
+          "base64_string": ""
+        },
+        "headers": {
+          "Accept-Encoding": [
+            "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          ],
+          "Accept": [
+            "*/*"
+          ],
+          "User-Agent": [
+            "Ruby"
+          ]
+        }
+      },
+      "response": {
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "headers": {
+          "Server": [
+            "nginx"
+          ],
+          "Date": [
+            "Wed, 04 Jun 2025 18:10:13 GMT"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Content-Length": [
+            "642"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Keep-Alive": [
+            "timeout=20"
+          ]
+        },
+        "body": {
+          "encoding": "ASCII-8BIT",
+          "base64_string": "W3sicGxhY2VfaWQiOjI5NzMxMzAwNywibGljZW5jZSI6IkRhdGEgwqkgT3Bl\nblN0cmVldE1hcCBjb250cmlidXRvcnMsIE9EYkwgMS4wLiBodHRwOi8vb3Nt\nLm9yZy9jb3B5cmlnaHQiLCJvc21fdHlwZSI6InJlbGF0aW9uIiwib3NtX2lk\nIjoyMjIxNzA5LCJsYXQiOiIzNy4zMjI4OTM0IiwibG9uIjoiLTEyMi4wMzIy\nODk1IiwiY2xhc3MiOiJib3VuZGFyeSIsInR5cGUiOiJhZG1pbmlzdHJhdGl2\nZSIsInBsYWNlX3JhbmsiOjE2LCJpbXBvcnRhbmNlIjowLjUyODgxNzU4NDI1\nMDgxMzgsImFkZHJlc3N0eXBlIjoiY2l0eSIsIm5hbWUiOiJDdXBlcnRpbm8i\nLCJkaXNwbGF5X25hbWUiOiJDdXBlcnRpbm8sIFNhbnRhIENsYXJhIENvdW50\neSwgQ2FsaWZvcm5pYSwgOTUwMTQsIFVuaXRlZCBTdGF0ZXMiLCJhZGRyZXNz\nIjp7ImNpdHkiOiJDdXBlcnRpbm8iLCJjb3VudHkiOiJTYW50YSBDbGFyYSBD\nb3VudHkiLCJzdGF0ZSI6IkNhbGlmb3JuaWEiLCJJU08zMTY2LTItbHZsNCI6\nIlVTLUNBIiwicG9zdGNvZGUiOiI5NTAxNCIsImNvdW50cnkiOiJVbml0ZWQg\nU3RhdGVzIiwiY291bnRyeV9jb2RlIjoidXMifSwiYm91bmRpbmdib3giOlsi\nMzcuMjc4NTM3OSIsIjM3LjM0MDM0OTgiLCItMTIyLjA5MTA4NTEiLCItMTIx\nLjk5NTgyNDkiXX1d\n"
+        }
+      },
+      "recorded_at": "Wed, 04 Jun 2025 18:10:13 GMT"
+    },
+    {
+      "request": {
+        "method": "get",
+        "uri": "https://nominatim.openstreetmap.org/reverse?accept-language=en&addressdetails=1&format=json&lat=37.322893&lon=-122.03229",
+        "body": {
+          "encoding": "US-ASCII",
+          "base64_string": ""
+        },
+        "headers": {
+          "Accept-Encoding": [
+            "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          ],
+          "Accept": [
+            "*/*"
+          ],
+          "User-Agent": [
+            "Ruby"
+          ]
+        }
+      },
+      "response": {
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "headers": {
+          "Server": [
+            "nginx"
+          ],
+          "Date": [
+            "Wed, 04 Jun 2025 18:10:53 GMT"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Content-Length": [
+            "702"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Keep-Alive": [
+            "timeout=20"
+          ]
+        },
+        "body": {
+          "encoding": "ASCII-8BIT",
+          "base64_string": "eyJwbGFjZV9pZCI6Mjk3NjU2MTgzLCJsaWNlbmNlIjoiRGF0YSDCqSBPcGVu\nU3RyZWV0TWFwIGNvbnRyaWJ1dG9ycywgT0RiTCAxLjAuIGh0dHA6Ly9vc20u\nb3JnL2NvcHlyaWdodCIsIm9zbV90eXBlIjoid2F5Iiwib3NtX2lkIjo0MTc3\nMjU2MzgsImxhdCI6IjM3LjMyMjgyNTYiLCJsb24iOiItMTIyLjAzMjI5MDMi\nLCJjbGFzcyI6ImhpZ2h3YXkiLCJ0eXBlIjoicHJpbWFyeSIsInBsYWNlX3Jh\nbmsiOjI2LCJpbXBvcnRhbmNlIjowLjE2MDI1NjYwNTQ3NzE4MDQ2LCJhZGRy\nZXNzdHlwZSI6InJvYWQiLCJuYW1lIjoiU3RldmVucyBDcmVlayBCb3VsZXZh\ncmQiLCJkaXNwbGF5X25hbWUiOiJTdGV2ZW5zIENyZWVrIEJvdWxldmFyZCwg\nQ3VwZXJ0aW5vLCBTYW50YSBDbGFyYSBDb3VudHksIENhbGlmb3JuaWEsIDk1\nMDE0LCBVbml0ZWQgU3RhdGVzIiwiYWRkcmVzcyI6eyJyb2FkIjoiU3RldmVu\ncyBDcmVlayBCb3VsZXZhcmQiLCJjaXR5IjoiQ3VwZXJ0aW5vIiwiY291bnR5\nIjoiU2FudGEgQ2xhcmEgQ291bnR5Iiwic3RhdGUiOiJDYWxpZm9ybmlhIiwi\nSVNPMzE2Ni0yLWx2bDQiOiJVUy1DQSIsInBvc3Rjb2RlIjoiOTUwMTQiLCJj\nb3VudHJ5IjoiVW5pdGVkIFN0YXRlcyIsImNvdW50cnlfY29kZSI6InVzIn0s\nImJvdW5kaW5nYm94IjpbIjM3LjMyMjgyNTIiLCIzNy4zMjI4MjYxIiwiLTEy\nMi4wMzI0MTE4IiwiLTEyMi4wMzIxOTQyIl19\n"
+        }
+      },
+      "recorded_at": "Wed, 04 Jun 2025 18:10:53 GMT"
+    }
+  ],
+  "recorded_with": "VCR 6.3.1"
+}
