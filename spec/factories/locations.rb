@@ -1,13 +1,12 @@
 FactoryBot.define do
   factory :location do
     sequence(:address) { |n| "#{n} Main Street, Cupertino, CA 95014" }
+    skip_geocoding { true }
 
     city { "Cupertino" }
     state { "CA" }
     zipcode { "95014" }
     country { "US" }
-    latitude { 37.331686 }
-    longitude { -122.030656 }
 
     trait :not_geocoded do
       latitude { nil }
@@ -16,6 +15,15 @@ FactoryBot.define do
       state { nil }
       zipcode { nil }
       country { nil }
+    end
+
+    trait :geocoded do
+      latitude { 37.331686 }
+      longitude { -122.030656 }
+    end
+
+    trait :with_geocoding do
+      skip_geocoding { false }
     end
 
     trait :san_francisco do

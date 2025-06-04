@@ -2,7 +2,7 @@ class Location < ApplicationRecord
   geocoded_by :address
   before_validation :normalize_address
   after_validation :geocode, if: :should_geocode?
-  after_validation :set_geocoded_attributes, if: :geocoded?
+  after_validation :set_geocoded_attributes, if: :should_set_geocoded_attributes?
 
   # Associations
   has_one :forecast, dependent: :destroy
@@ -35,6 +35,10 @@ class Location < ApplicationRecord
 
   def should_geocode?
     address_changed? && !skip_geocoding
+  end
+
+  def should_set_geocoded_attributes?
+    geocoded? && !skip_geocoding
   end
 
   def coordinates_present_unless_skipped
