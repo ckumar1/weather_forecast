@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_04_143728) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_04_211321) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_04_143728) do
     t.decimal "low_temp", precision: 5, scale: 2
     t.string "conditions"
     t.datetime "forecast_timestamp"
-    t.boolean "from_cache"
+    t.boolean "from_cache", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["location_id"], name: "index_forecasts_on_location_id"
