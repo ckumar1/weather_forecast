@@ -57,24 +57,19 @@ RSpec.describe Location, type: :model do
   end
 
   describe '#display_name' do
-    it 'returns the address when city, state, and zipcode are blank' do
+    it 'returns the address when city and state are blank' do
       location = build(:location, :not_geocoded, address: '123 Main St')
       expect(location.display_name).to eq('123 Main St')
     end
 
-    it 'returns formatted city, state, zipcode when available' do
+    it 'returns formatted city, state when available' do
       location = build(:location)
-      expect(location.display_name).to eq('Cupertino, CA, 95014')
+      expect(location.display_name).to eq('Cupertino, CA')
     end
 
     it 'excludes blank values from the formatted display' do
       location = build(:location, state: '')
-      expect(location.display_name).to eq('Cupertino, 95014')
-    end
-
-    it 'handles partial geocoded data' do
-      location = build(:location, city: 'Cupertino', state: 'CA', zipcode: nil)
-      expect(location.display_name).to eq('Cupertino, CA')
+      expect(location.display_name).to eq('Cupertino')
     end
   end
 

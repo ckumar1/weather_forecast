@@ -1,5 +1,5 @@
 class Location < ApplicationRecord
-  geocoded_by :address
+  geocoded_by :address, params: {countrycodes: "us,ca"}
   before_validation :normalize_address
   after_validation :geocode, if: :should_geocode?
   after_validation :set_geocoded_attributes, if: :should_set_geocoded_attributes?
@@ -17,9 +17,9 @@ class Location < ApplicationRecord
   attr_accessor :skip_geocoding
 
   def display_name
-    return address if city.blank? && state.blank? && zipcode.blank?
+    return address if city.blank? && state.blank?
 
-    [city, state, zipcode].reject(&:blank?).join(', ')
+    [city, state].reject(&:blank?).join(', ')
   end
 
   def geocoded?
