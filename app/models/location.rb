@@ -11,6 +11,9 @@ class Location < ApplicationRecord
   validates :address, presence: true, uniqueness: { case_sensitive: false }
   validate :coordinates_present_unless_skipped
 
+  # Scopes
+  scope :recent, -> { order(created_at: :desc) }
+
   attr_accessor :skip_geocoding
 
   def display_name
