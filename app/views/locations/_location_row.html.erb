@@ -1,0 +1,18 @@
+<tr>
+  <td>
+    <div class="location-name">
+      <strong><%= link_to location.display_name, location_path(location), class: "location-link" %></strong><br>
+    </div>
+  </td>
+  <td colspan="3">
+    <% weather_result = @weather_results&.[](location.id) %>
+    <% if weather_result %>
+        <%= render "shared/weather_info", forecast: weather_result.forecast, from_cache: weather_result.from_cache %>
+      <% else %>
+        <%= render "shared/weather_info", forecast: location.forecast, from_cache: true %>
+    <% end %>
+  </td>
+  <td >
+    <%= button_to "Delete", location_path(location), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>
+  </td>
+</tr>

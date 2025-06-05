@@ -1,0 +1,31 @@
+<% content_for :title, "Add New Location" %>
+
+<h2>Add New Location</h2>
+<%= form_with model: @location, local: true do |form| %>
+  <% if @location.errors.any? %>
+    <div class="form-errors">
+      <h4>Errors:</h4>
+      <ul>
+        <% @location.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :address %>
+    <%= form.text_field :address,
+      placeholder: "Enter a location address",
+      required: true,
+      autofocus: true %>
+    <div class="form-text">
+      You can enter a full address, city and state, or just a zipcode
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit "Add Location", class: "btn btn-primary" %>
+    <%= link_to "Cancel", locations_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

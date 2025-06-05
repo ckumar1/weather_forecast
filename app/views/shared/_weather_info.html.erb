@@ -1,0 +1,13 @@
+<% if forecast.present? %>
+  <div class="weather-info">
+    <span class="temperature"><%= forecast.formatted_current_temp %></span>
+    <div class="weather-meta">
+      <small class="forecast-metadata">
+        Updated <%= forecast.age %>
+        | <span title="<%= from_cache ? 'Data loaded from cache' : 'Fresh data from API' %>"><%= from_cache ? '📦' : '🔄' %></span>
+      </small>
+    </div>
+  </div>
+<% else %>
+    <span class="text-muted">No forecast data</span>
+<% end %>

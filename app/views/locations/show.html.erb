@@ -1,0 +1,12 @@
+<% content_for :title, @location.display_name %>
+
+<div class="location-header mb-3">
+  <h2><%= @location.display_name %></h2>
+</div>
+
+<%= render "shared/weather_info", forecast: @location.forecast, from_cache: @from_cache %>
+
+<div class="actions">
+  <%= link_to "Back to Locations", locations_path, class: "btn btn-secondary" %>
+  <%= link_to "Delete Location", location_path(@location), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>  
+</div>

@@ -1,0 +1,22 @@
+<% content_for :title, "Locations" %>
+
+<% if @locations.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Location</th>
+        <th colspan="3">Weather</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @locations.each do |location| %>
+        <%= render "location_row", location: location %>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="empty-state">
+    <h3>No locations found. Please add a location.</h3>
+  </div>
+<% end %>

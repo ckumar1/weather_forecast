@@ -4,12 +4,17 @@ class LocationsController < ApplicationController
   before_action :set_location, only: [:show, :destroy]
 
   def index
-    @locations = Location.includes(:forecast).recent
+    @locations = Location.recent
+
+    @weather_results = @locations.filter_map do |location|
+      result = weather_service.fetch_weather(location)
+      [location.id, result] if result.success?
+    end.to_h
   end
 
   def show
     # fetch weather data for the location
-    result = @weather_service.fetch_weather(@location)
+    result = weather_service.fetch_weather(@location)
      
     if result.success?
       @from_cache = result.from_cache
