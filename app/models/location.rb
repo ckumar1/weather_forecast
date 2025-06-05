@@ -27,6 +27,13 @@ class Location < ApplicationRecord
     [latitude, longitude]
   end
 
+  
+  def weather_cache_key
+    return "weather_forecast/zipcode/#{zipcode}" if zipcode.present?
+    
+    "weather_forecast/coordinates/#{latitude}_#{longitude}"
+  end
+
   private
 
   def normalize_address

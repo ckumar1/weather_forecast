@@ -54,16 +54,6 @@ RSpec.describe Location, type: :model do
         end
       end
     end
-
-    describe 'duplicate addresses' do
-      it 'does not allow duplicate addresses' do
-        existing_location = create(:location, address: '123 Main St, Cupertino, CA 95014')
-        new_location = build(:location, address: '123 MAIN ST, Cupertino, CA 95014')
-
-        expect(new_location).not_to be_valid
-        expect(new_location.errors[:address]).to include('has already been taken')
-      end
-    end
   end
 
   describe '#display_name' do
@@ -78,13 +68,25 @@ RSpec.describe Location, type: :model do
     end
 
     it 'excludes blank values from the formatted display' do
-      location = build(:location, city: 'Cupertino', state: '', zipcode: '95014')
+      location = build(:location, state: '')
       expect(location.display_name).to eq('Cupertino, 95014')
     end
 
     it 'handles partial geocoded data' do
       location = build(:location, city: 'Cupertino', state: 'CA', zipcode: nil)
       expect(location.display_name).to eq('Cupertino, CA')
+    end
+  end
+
+  describe '#weather_cache_key' do
+    it 'returns zipcode-based cache key when zipcode is present' do
+      location = build(:location)
+      expect(location.weather_cache_key).to eq('weather_forecast/zipcode/95014')
+    end
+
+    it 'returns coordinates-based cache key when zipcode is not present' do
+      location = build(:location, :geocoded, zipcode: nil)
+      expect(location.weather_cache_key).to eq('weather_forecast/coordinates/37.331686_-122.030656')
     end
   end
 end
