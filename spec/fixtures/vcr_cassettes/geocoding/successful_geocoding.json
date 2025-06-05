@@ -155,6 +155,58 @@
         }
       },
       "recorded_at": "Thu, 05 Jun 2025 07:00:53 GMT"
+    },
+    {
+      "request": {
+        "method": "get",
+        "uri": "https://nominatim.openstreetmap.org/search?accept-language=en&addressdetails=1&countrycodes=us,ca&format=json&q=Cupertino,%20CA",
+        "body": {
+          "encoding": "US-ASCII",
+          "base64_string": ""
+        },
+        "headers": {
+          "Accept-Encoding": [
+            "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          ],
+          "Accept": [
+            "*/*"
+          ],
+          "User-Agent": [
+            "Ruby"
+          ]
+        }
+      },
+      "response": {
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "headers": {
+          "Server": [
+            "nginx"
+          ],
+          "Date": [
+            "Thu, 05 Jun 2025 20:44:04 GMT"
+          ],
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ],
+          "Content-Length": [
+            "642"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Keep-Alive": [
+            "timeout=20"
+          ]
+        },
+        "body": {
+          "encoding": "ASCII-8BIT",
+          "base64_string": "W3sicGxhY2VfaWQiOjI5NzMxMzAwNywibGljZW5jZSI6IkRhdGEgwqkgT3Bl\nblN0cmVldE1hcCBjb250cmlidXRvcnMsIE9EYkwgMS4wLiBodHRwOi8vb3Nt\nLm9yZy9jb3B5cmlnaHQiLCJvc21fdHlwZSI6InJlbGF0aW9uIiwib3NtX2lk\nIjoyMjIxNzA5LCJsYXQiOiIzNy4zMjI4OTM0IiwibG9uIjoiLTEyMi4wMzIy\nODk1IiwiY2xhc3MiOiJib3VuZGFyeSIsInR5cGUiOiJhZG1pbmlzdHJhdGl2\nZSIsInBsYWNlX3JhbmsiOjE2LCJpbXBvcnRhbmNlIjowLjUyODgxNzU4NDI1\nMDgxMzgsImFkZHJlc3N0eXBlIjoiY2l0eSIsIm5hbWUiOiJDdXBlcnRpbm8i\nLCJkaXNwbGF5X25hbWUiOiJDdXBlcnRpbm8sIFNhbnRhIENsYXJhIENvdW50\neSwgQ2FsaWZvcm5pYSwgOTUwMTQsIFVuaXRlZCBTdGF0ZXMiLCJhZGRyZXNz\nIjp7ImNpdHkiOiJDdXBlcnRpbm8iLCJjb3VudHkiOiJTYW50YSBDbGFyYSBD\nb3VudHkiLCJzdGF0ZSI6IkNhbGlmb3JuaWEiLCJJU08zMTY2LTItbHZsNCI6\nIlVTLUNBIiwicG9zdGNvZGUiOiI5NTAxNCIsImNvdW50cnkiOiJVbml0ZWQg\nU3RhdGVzIiwiY291bnRyeV9jb2RlIjoidXMifSwiYm91bmRpbmdib3giOlsi\nMzcuMjc4NTM3OSIsIjM3LjM0MDM0OTgiLCItMTIyLjA5MTA4NTEiLCItMTIx\nLjk5NTgyNDkiXX1d\n"
+        }
+      },
+      "recorded_at": "Thu, 05 Jun 2025 20:44:04 GMT"
     }
   ],
   "recorded_with": "VCR 6.3.1"

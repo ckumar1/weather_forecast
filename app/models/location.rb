@@ -2,7 +2,6 @@ class Location < ApplicationRecord
   geocoded_by :address, params: {countrycodes: "us,ca"}
   before_validation :normalize_address
   after_validation :geocode, if: :should_geocode?
-  after_validation :set_geocoded_attributes, if: :should_set_geocoded_attributes?
 
   # Associations
   has_one :forecast, dependent: :destroy
@@ -30,7 +29,6 @@ class Location < ApplicationRecord
     [latitude, longitude]
   end
 
-  
   def weather_cache_key
     return "weather_forecast/zipcode/#{zipcode}" if zipcode.present?
     
@@ -44,11 +42,7 @@ class Location < ApplicationRecord
   end
 
   def should_geocode?
-    address_changed? && !skip_geocoding
-  end
-
-  def should_set_geocoded_attributes?
-    geocoded? && !skip_geocoding
+    address_changed? && !skip_geocoding && address.present?
   end
 
   def coordinates_present_unless_skipped
@@ -57,13 +51,28 @@ class Location < ApplicationRecord
     errors.add(:base, "Location could not be geocoded") unless geocoded?
   end
 
-  def set_geocoded_attributes
-    return unless geocoded?
-    return unless (result = Geocoder.search(coordinates).first)
-
-    self.city ||= result.city
-    self.state ||= result.state
-    self.zipcode ||= result.postal_code
-    self.country ||= result.country_code.upcase
+  # Override the geocode method to capture address components from the same API call
+  def geocode
+    return false unless address.present?
+    
+    # Perform the geocoding search
+    results = Geocoder.search(address)
+    result = results.first
+    
+    if result
+      # Set coordinates (this is what the original geocode method does)
+      self.latitude = result.latitude
+      self.longitude = result.longitude
+      
+      # Extract address components from the same result without additional API call
+      self.city ||= result.city
+      self.state ||= result.state
+      self.zipcode ||= result.postal_code
+      self.country ||= result.country_code&.upcase
+      
+      true
+    else
+      false
+    end
   end
 end
