@@ -86,3 +86,6 @@ gem 'httparty', '~> 0.21'
 
 # Environment variables
 gem 'dotenv-rails', '~> 2.8', groups: [:development, :test]
+
+# Sass for CSS preprocessing
+gem 'sassc-rails'
