@@ -31,12 +31,7 @@ class LocationsController < ApplicationController
     @location = Location.new(location_params)
 
     if @location.save
-      result = weather_service.fetch_weather(@location)
-      if result.success?
-        redirect_to @location, notice: 'Location was successfully created.'
-      else
-        redirect_to @location, alert: "Location created, but unable to fetch weather: #{result.error}"
-      end
+      redirect_to @location, notice: 'Location was successfully created.'
     else
       render :new, status: :unprocessable_entity
     end
