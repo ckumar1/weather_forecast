@@ -63,7 +63,7 @@ RSpec.describe Location, type: :model do
     end
 
     it 'returns formatted city, state, zipcode when available' do
-      location = build(:location, :geocoded)
+      location = build(:location)
       expect(location.display_name).to eq('Cupertino, CA, 95014')
     end
 
@@ -85,7 +85,7 @@ RSpec.describe Location, type: :model do
     end
 
     it 'returns coordinates-based cache key when zipcode is not present' do
-      location = build(:location, :geocoded, zipcode: nil)
+      location = build(:location, zipcode: nil)
       expect(location.weather_cache_key).to eq('weather_forecast/coordinates/37.331686_-122.030656')
     end
   end

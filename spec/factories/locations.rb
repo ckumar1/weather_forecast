@@ -7,6 +7,8 @@ FactoryBot.define do
     state { "CA" }
     zipcode { "95014" }
     country { "US" }
+    latitude { 37.331686 }
+    longitude { -122.030656 }
 
     trait :not_geocoded do
       latitude { nil }
