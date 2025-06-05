@@ -96,6 +96,7 @@ GEM
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     builder (3.3.0)
+    byebug (12.0.0)
     capybara (3.40.0)
       addressable
       matrix
@@ -349,6 +350,7 @@ DEPENDENCIES
   better_errors (~> 2.10)
   binding_of_caller (~> 1.0)
   bootsnap
+  byebug
   capybara
   debug
   dotenv-rails (~> 2.8)
