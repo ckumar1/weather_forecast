@@ -7,9 +7,9 @@
   <td colspan="3">
     <% weather_result = @weather_results&.[](location.id) %>
     <% if weather_result %>
-        <%= render "shared/weather_info", forecast: weather_result.forecast, from_cache: weather_result.from_cache %>
+        <%= render "shared/weather_info_compact", forecast: weather_result.forecast, from_cache: weather_result.from_cache %>
       <% else %>
-        <%= render "shared/weather_info", forecast: location.forecast, from_cache: true %>
+        <%= render "shared/weather_info_compact", forecast: location.forecast, from_cache: true %>
     <% end %>
   </td>
   <td >

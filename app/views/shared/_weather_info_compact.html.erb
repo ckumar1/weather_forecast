@@ -1,0 +1,16 @@
+<% if forecast.present? %>
+  <div class="weather-row">
+    <span class="temperature-compact"><%= forecast.formatted_current_temp %></span>
+    <% if forecast.conditions.present? %>
+      <span class="conditions-compact"><%= forecast.conditions %></span>
+    <% end %>
+    <div class="weather-meta-compact">
+      <small class="forecast-metadata">
+        Updated <%= forecast.age %>
+        | <span title="<%= from_cache ? 'Data loaded from cache' : 'Fresh data from API' %>"><%= from_cache ? '📦' : '🔄' %></span>
+      </small>
+    </div>
+  </div>
+<% else %>
+  <span class="text-muted">No forecast data</span>
+<% end %>

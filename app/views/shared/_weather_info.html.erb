@@ -1,12 +1,27 @@
 <% if forecast.present? %>
   <div class="weather-info">
     <span class="temperature"><%= forecast.formatted_current_temp %></span>
-    <div class="weather-meta">
-      <small class="forecast-metadata">
-        Updated <%= forecast.age %>
-        | <span title="<%= from_cache ? 'Data loaded from cache' : 'Fresh data from API' %>"><%= from_cache ? '📦' : '🔄' %></span>
-      </small>
+    <% if forecast.conditions.present? %>
+      <div class="conditions"><%= forecast.conditions %></div>
+    <% end %>
+  </div>
+
+  <div class="weather-details">
+    <div class="detail-card">
+      <div class="label">High</div>
+      <div class="value high"><%= forecast.formatted_high_temp %></div>
     </div>
+    <div class="detail-card">
+      <div class="label">Low</div>
+      <div class="value low"><%= forecast.formatted_low_temp %></div>
+    </div>
+  </div>
+
+  <div class="weather-meta">
+    <small class="forecast-metadata">
+      Updated <%= forecast.age %>
+      | <span title="<%= from_cache ? 'Data loaded from cache' : 'Fresh data from API' %>"><%= from_cache ? '📦' : '🔄' %></span>
+    </small>
   </div>
 <% else %>
     <span class="text-muted">No forecast data</span>

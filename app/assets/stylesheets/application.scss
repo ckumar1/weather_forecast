@@ -280,6 +280,48 @@ body {
   }
 }
 
+.weather-meta {
+  text-align: center;
+  padding: 1rem;
+  background-color: rgba($gray-medium, 0.05);
+  border-radius: 6px;
+  border-top: 1px solid $gray-border;
+  margin-bottom: 1rem;
+  
+  .forecast-metadata {
+    font-size: 0.875rem;
+    color: $gray-medium;
+    margin: 0;
+  }
+}
+
+// Compact weather display for table rows
+.weather-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  
+  .temperature-compact {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .conditions-compact {
+    font-size: 0.875rem;
+    color: $gray-medium;
+    font-style: italic;
+  }
+  
+  .weather-meta-compact {
+    .forecast-metadata {
+      font-size: 0.75rem;
+      color: $gray-medium;
+      margin: 0;
+    }
+  }
+}
+
 // Empty states
 .empty-state {
   text-align: center;
@@ -311,12 +353,6 @@ body {
 // Improve table row hover effect
 .table tbody tr:hover {
   background-color: rgba(0, 123, 255, 0.05);
-}
-
-.forecast-metadata {
-  font-size: 0.875rem;
-  color: $gray-medium;
-  margin-top: 0.5rem;
 }
 
 
