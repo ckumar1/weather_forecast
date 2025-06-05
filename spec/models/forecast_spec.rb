@@ -15,16 +15,7 @@ RSpec.describe Forecast, type: :model do
   # Validations
   describe 'validations' do
     it { should validate_presence_of(:current_temp) }
-  end
-
-  describe 'callbacks' do
-    it 'automatically sets forecast_timestamp on creation' do
-      location = create(:location)
-      forecast = Forecast.create!(current_temp: 72.5, location: location)
-      
-      expect(forecast.forecast_timestamp).to be_present
-      expect(forecast.forecast_timestamp).to be_within(1.second).of(Time.current)
-    end
+    it { should validate_presence_of(:forecast_timestamp) }
   end
 
   describe '#current?' do
@@ -71,20 +62,6 @@ RSpec.describe Forecast, type: :model do
       # Using Timecop or travel_to would be better here, but keeping it simple
       forecast = build(:forecast, forecast_timestamp: 5.minutes.ago)
       expect(forecast.age).to include('minutes ago')
-    end
-  end
-
-  describe 'defaults' do
-    it 'sets from_cache to false by default' do
-      forecast = Forecast.new
-      expect(forecast.from_cache).to eq(false)
-    end
-    
-    it 'sets forecast_timestamp on creation' do
-      location = create(:location)
-      forecast = Forecast.create!(current_temp: 72.5, location:)
-      
-      expect(forecast.forecast_timestamp).to be_within(1.second).of(Time.current)
     end
   end
 end

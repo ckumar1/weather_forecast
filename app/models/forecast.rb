@@ -3,10 +3,8 @@ class Forecast < ApplicationRecord
 
   belongs_to :location
 
-  validates :current_temp, presence: true
+  validates :current_temp, :forecast_timestamp, presence: true
 
-  before_validation :set_forecast_timestamp, on: :create
-  
   def current?
     forecast_timestamp > CACHE_DURATION.ago
   end
@@ -40,10 +38,6 @@ class Forecast < ApplicationRecord
   end
 
   private
-  
-  def set_forecast_timestamp
-    self.forecast_timestamp ||= Time.current
-  end
 
   def time_ago_in_words(time)
     ActionController::Base.helpers.time_ago_in_words(time)

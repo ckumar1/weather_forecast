@@ -6,7 +6,6 @@ FactoryBot.define do
     low_temp { 65.0 }
     conditions { "Partly Cloudy" }
     forecast_timestamp { Time.current }
-    from_cache { false }
     
     trait :cached do
       from_cache { true }
