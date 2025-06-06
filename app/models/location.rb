@@ -11,7 +11,7 @@ class Location < ApplicationRecord
   validate :coordinates_present_unless_skipped
 
   # Scopes
-  scope :recent, -> { order(created_at: :desc) }
+  scope :recent, -> { order(created_at: :desc).limit(10) }
 
   attr_accessor :skip_geocoding
 

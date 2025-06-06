@@ -56,6 +56,26 @@ RSpec.describe Location, type: :model do
     end
   end
 
+  describe 'scopes' do
+    describe '.recent' do
+      before do
+        15.times do |i|
+          create(:location, 
+            address: "#{i + 1} Test St, City, CA", 
+            created_at: i.seconds.ago
+          )
+        end
+      end
+
+      it 'returns the 10 most recently created locations in descending order' do
+        recent_locations = Location.recent
+
+        expect(recent_locations.count).to eq(10)
+        expect(recent_locations.first.created_at).to be > recent_locations.last.created_at
+      end
+    end
+  end
+
   describe '#display_name' do
     it 'returns the address when city and state are blank' do
       location = build(:location, :not_geocoded, address: '123 Main St')
