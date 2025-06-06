@@ -38,15 +38,5 @@ FactoryBot.define do
       latitude { 37.794220 }
       longitude { -122.395055 }
     end
-
-    trait :london do
-      sequence(:address) { |n| "#{n} Oxford Street, London, SW1A 1AA" }
-      city { 'London' }
-      state { 'England' }
-      zipcode { 'SW1A 1AA' }
-      country { 'GB' }
-      latitude { 51.507351 }
-      longitude { -0.127758 }
-    end
   end
 end
