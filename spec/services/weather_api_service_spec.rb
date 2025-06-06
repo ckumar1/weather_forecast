@@ -14,15 +14,15 @@ RSpec.describe WeatherApiService do
       let(:location) { create(:location) }
 
       it 'fetches weather and creates forecast', vcr: { cassette_name: 'weather_api/fresh_call' } do
-        expect {
+        expect do
           result = service.fetch_weather(location)
-          
+
           expect(result.success?).to be true
           expect(result.from_cache).to be false
           expect(result.forecast).to be_present
           expect(result.forecast.current_temp).to be_a(Numeric)
           expect(result.forecast.conditions).to be_present
-        }.to change { Forecast.count }.by(1)
+        end.to change { Forecast.count }.by(1)
       end
     end
 
@@ -32,9 +32,9 @@ RSpec.describe WeatherApiService do
 
       it 'returns existing forecast without API call' do
         expect(HTTParty).not_to receive(:get)
-        
+
         result = service.fetch_weather(location)
-        
+
         expect(result.success?).to be true
         expect(result.from_cache).to be true
         expect(result.forecast).to eq(current_forecast)
@@ -47,7 +47,7 @@ RSpec.describe WeatherApiService do
 
       it 'fetches fresh data', vcr: { cassette_name: 'weather_api/refresh_expired' } do
         result = service.fetch_weather(location)
-        
+
         expect(result.success?).to be true
         expect(result.from_cache).to be false
         expect(location.forecast.reload.current_temp).not_to eq(99)
@@ -72,9 +72,9 @@ RSpec.describe WeatherApiService do
 
       it 'uses cached data without API call' do
         expect(HTTParty).not_to receive(:get)
-        
+
         result = service.fetch_weather(location)
-        
+
         expect(result.success?).to be true
         expect(result.from_cache).to be true
         expect(result.forecast.current_temp).to eq(75.0)
@@ -84,10 +84,10 @@ RSpec.describe WeatherApiService do
         let!(:old_forecast) { create(:forecast, :expired, location:, current_temp: 65.0) }
 
         it 'updates existing forecast with cached data' do
-          expect {
+          expect do
             service.fetch_weather(location)
-          }.not_to change { Forecast.count }
-          
+          end.not_to(change { Forecast.count })
+
           expect(location.reload.forecast.current_temp).to eq(75.0)
         end
       end
@@ -100,7 +100,7 @@ RSpec.describe WeatherApiService do
       it 'second location uses cached data from first', vcr: { cassette_name: 'weather_api/shared_cache' } do
         result1 = service.fetch_weather(location1)
         expect(result1.from_cache).to be false
-        
+
         result2 = service.fetch_weather(location2)
         expect(result2.from_cache).to be true
         expect(result2.forecast.current_temp).to eq(result1.forecast.current_temp)
@@ -109,25 +109,25 @@ RSpec.describe WeatherApiService do
 
     context 'with API errors' do
       let(:location) { create(:location) }
-      
+
       before { VCR.turn_off! }
       after { VCR.turn_on! }
 
       it 'handles invalid API key' do
         stub_request(:get, /api.weatherapi.com/)
           .to_return(status: 401, body: { error: { message: 'Invalid API key' } }.to_json)
-        
+
         result = service.fetch_weather(location)
-        
+
         expect(result.success?).to be false
         expect(result.error).to eq('Invalid API key')
       end
-      
+
       it 'handles network timeout' do
         stub_request(:get, /api.weatherapi.com/).to_timeout
-        
+
         result = service.fetch_weather(location)
-        
+
         expect(result.success?).to be false
         expect(result.error).to include('timed out')
       end
@@ -135,9 +135,9 @@ RSpec.describe WeatherApiService do
       it 'handles rate limit' do
         stub_request(:get, /api.weatherapi.com/)
           .to_return(status: 429)
-        
+
         result = service.fetch_weather(location)
-        
+
         expect(result.success?).to be false
         expect(result.error).to eq('API rate limit exceeded')
       end
@@ -146,9 +146,9 @@ RSpec.describe WeatherApiService do
     context 'with invalid input' do
       it 'handles non-geocoded location' do
         location = build(:location, :not_geocoded)
-        
+
         result = service.fetch_weather(location)
-        
+
         expect(result.success?).to be false
         expect(result.error).to eq('Location must be geocoded')
       end
@@ -156,7 +156,7 @@ RSpec.describe WeatherApiService do
       it 'handles missing API key' do
         allow(ENV).to receive(:fetch).with('WEATHER_API_KEY', nil).and_return(nil)
         service = described_class.new
-        
+
         result = service.fetch_weather(create(:location))
 
         expect(result.success?).to be false

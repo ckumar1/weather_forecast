@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Location, type: :model do
@@ -6,7 +8,7 @@ RSpec.describe Location, type: :model do
       expect(build(:location)).to be_valid
     end
   end
-  
+
   describe 'associations' do
     it { should have_one(:forecast).dependent(:destroy) }
   end
@@ -60,10 +62,9 @@ RSpec.describe Location, type: :model do
     describe '.recent' do
       before do
         15.times do |i|
-          create(:location, 
-            address: "#{i + 1} Test St, City, CA", 
-            created_at: i.seconds.ago
-          )
+          create(:location,
+                 address: "#{i + 1} Test St, City, CA",
+                 created_at: i.seconds.ago)
         end
       end
 

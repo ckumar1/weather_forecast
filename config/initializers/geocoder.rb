@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Geocoder.configure(
   # Geocoding options
   timeout: 5,                 # geocoding service timeout (secs)
@@ -18,7 +20,6 @@ Geocoder.configure(
   # Calculation options
   units: :mi,                 # :km for kilometers or :mi for miles
   distances: :linear          # :spherical or :linear
-
   # Cache configuration
   # cache_options: {
   #   expiration: 2.days,

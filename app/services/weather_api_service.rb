@@ -16,28 +16,26 @@ class WeatherApiService
   def fetch_weather(location)
     return api_key_error unless configured?
     return location_error unless location&.geocoded?
-    
+
     # First check if  location already has current forecast
-    if location.forecast && location.forecast.current?
+    if location.forecast&.current?
       Rails.logger.info "[WeatherAPI] Using existing forecast for location #{location.id} (#{location.display_name})"
       return Result.new(success?: true, forecast: location.forecast, from_cache: true)
     end
-    
 
     # Then check Rails cache (for locations that don't have current forecasts)
     cache_key = location.weather_cache_key
     cached_data = Rails.cache.read(cache_key)
-    
+
     if cached_data
       Rails.logger.info "[WeatherAPI] Cache hit for #{cache_key}"
       forecast = create_or_update_forecast(location, cached_data)
       return Result.new(success?: true, forecast:, from_cache: true)
     end
 
-
-      # Make API call if no cache hit happens
-      Rails.logger.info "[WeatherAPI] Cache miss for #{cache_key}"
-      fetch_fresh_weather(location)
+    # Make API call if no cache hit happens
+    Rails.logger.info "[WeatherAPI] Cache miss for #{cache_key}"
+    fetch_fresh_weather(location)
   end
 
   def fetch_fresh_weather(location)
@@ -61,14 +59,13 @@ class WeatherApiService
 
   def make_api_request(query)
     self.class.get('/forecast.json',
-      query: {
-        key: @api_key,
-        q: query,
-        days: 1,
-        aqi: 'no',
-        alerts: 'no'
-      }
-    )
+                   query: {
+                     key: @api_key,
+                     q: query,
+                     days: 1,
+                     aqi: 'no',
+                     alerts: 'no'
+                   })
   end
 
   def handle_response(response, location)
@@ -98,7 +95,7 @@ class WeatherApiService
       current_temp: body.dig('current', 'temp_f'),
       conditions: body.dig('current', 'condition', 'text'),
       high_temp: body.dig('forecast', 'forecastday', 0, 'day', 'maxtemp_f'),
-      low_temp: body.dig('forecast', 'forecastday', 0, 'day', 'mintemp_f'),
+      low_temp: body.dig('forecast', 'forecastday', 0, 'day', 'mintemp_f')
     }
   end
 
@@ -108,23 +105,21 @@ class WeatherApiService
       high_temp: data[:high_temp],
       low_temp: data[:low_temp],
       conditions: data[:conditions],
-      forecast_timestamp: data[:fetched_at] || Time.current,
+      forecast_timestamp: data[:fetched_at] || Time.current
     }
 
-    forecast = if location.forecast
+    if location.forecast
       location.forecast.update!(attributes)
       location.forecast
     else
       location.create_forecast!(attributes)
     end
-
-    forecast
   end
 
   def api_key_error
     Result.new(success?: false, error: 'Weather API key not configured')
   end
-  
+
   def location_error
     Result.new(success?: false, error: 'Location must be geocoded')
   end

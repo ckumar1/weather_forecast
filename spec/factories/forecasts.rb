@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :forecast do
     association :location
     current_temp { 72.5 }
     high_temp { 78.0 }
     low_temp { 65.0 }
-    conditions { "Partly Cloudy" }
+    conditions { 'Partly Cloudy' }
     forecast_timestamp { Time.current }
-    
+
     trait :cached do
       from_cache { true }
     end
-    
+
     trait :expired do
       forecast_timestamp { 31.minutes.ago }
     end

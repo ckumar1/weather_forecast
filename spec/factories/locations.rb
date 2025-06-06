@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :location do
     sequence(:address) { |n| "#{n} Main Street, Cupertino, CA 95014" }
     skip_geocoding { true }
 
-    city { "Cupertino" }
-    state { "CA" }
-    zipcode { "95014" }
-    country { "US" }
+    city { 'Cupertino' }
+    state { 'CA' }
+    zipcode { '95014' }
+    country { 'US' }
     latitude { 37.331686 }
     longitude { -122.030656 }
 
@@ -30,19 +32,19 @@ FactoryBot.define do
 
     trait :san_francisco do
       sequence(:address) { |n| "#{n} Market Street, San Francisco, CA 94105" }
-      city { "San Francisco" }
-      state { "CA" }
-      zipcode { "94105" }
+      city { 'San Francisco' }
+      state { 'CA' }
+      zipcode { '94105' }
       latitude { 37.794220 }
       longitude { -122.395055 }
     end
 
     trait :london do
       sequence(:address) { |n| "#{n} Oxford Street, London, SW1A 1AA" }
-      city { "London" }
-      state { "England" }
-      zipcode { "SW1A 1AA" }
-      country { "GB" }
+      city { 'London' }
+      state { 'England' }
+      zipcode { 'SW1A 1AA' }
+      country { 'GB' }
       latitude { 51.507351 }
       longitude { -0.127758 }
     end
