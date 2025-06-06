@@ -14,7 +14,7 @@ VCR.configure do |config|
   }
 
   # Filter sensitive data
-  config.filter_sensitive_data('<WEATHER_API_KEY>') { ENV['WEATHER_API_KEY'] }
+  config.filter_sensitive_data('<WEATHER_API_KEY>') { ENV.fetch('WEATHER_API_KEY', nil) }
 
   # Ignore localhost and test domains
   config.ignore_localhost = true
