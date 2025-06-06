@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
+# Service for fetching weather data from WeatherAPI.com with intelligent caching.
+# Uses database-first caching strategy to leverage Rails association optimizations.
+#
+# Caching approach:
+# 1. Check database for current forecast (fast association lookup)
+# 2. Check Rails cache if no current forecast exists
+# 3. Make API call as last resort
 class WeatherApiService
   include HTTParty
 
+  # Result object for consistent success/failure handling
   Result = Struct.new(:success?, :forecast, :error, :from_cache, keyword_init: true)
 
   base_uri ENV.fetch('WEATHER_API_BASE_URL', 'https://api.weatherapi.com/v1')
@@ -13,6 +21,9 @@ class WeatherApiService
     @api_key = ENV.fetch('WEATHER_API_KEY', nil)
   end
 
+  # Fetches weather data for a location using database-first caching
+  # @param location [Location] must be geocoded
+  # @return [Result] success/failure with forecast data or error
   def fetch_weather(location)
     return api_key_error unless configured?
     return location_error unless location&.geocoded?
@@ -24,13 +35,15 @@ class WeatherApiService
 
   private
 
+  # Check database first - leverages Rails association caching
   def fetch_from_existing_forecast(location)
     return unless location.forecast&.current?
 
-    Rails.logger.info "[WeatherAPI] Using existing forecast for location #{location.id} (#{location.display_name})"
+    Rails.logger.info "[WeatherAPI] Using existing forecast for location #{location.id}"
     Result.new(success?: true, forecast: location.forecast, from_cache: true)
   end
 
+  # Check Rails cache for locations without current forecasts
   def fetch_from_cache(location)
     cached_data = Rails.cache.read(location.weather_cache_key)
     return unless cached_data
@@ -40,6 +53,7 @@ class WeatherApiService
     Result.new(success?: true, forecast: forecast, from_cache: true)
   end
 
+  # Last resort - make fresh API call
   def fetch_fresh_weather(location)
     query = determine_query_param(location)
     response = make_api_request(query)
@@ -53,6 +67,7 @@ class WeatherApiService
     @api_key.present?
   end
 
+  # Prefer zipcode over coordinates for better API accuracy
   def determine_query_param(location)
     location.zipcode.presence || "#{location.latitude},#{location.longitude}"
   end
@@ -104,7 +119,6 @@ class WeatherApiService
 
   def create_or_update_forecast(location, data)
     forecast_attributes = build_forecast_attributes(data)
-
     location.forecast&.update!(forecast_attributes) || location.create_forecast!(forecast_attributes)
   end
 
