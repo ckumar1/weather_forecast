@@ -46,7 +46,6 @@ class WeatherApiService
 
     handle_response(response, location)
   rescue Net::ReadTimeout, Net::OpenTimeout => e
-    Rails.logger.error "[WeatherAPI] Request timed out: #{e.message}"
     Result.new(success?: false, error: "Weather API request timed out: #{e.message}")
   end
 
@@ -78,13 +77,12 @@ class WeatherApiService
     when 429
       Result.new(success?: false, error: 'API rate limit exceeded')
     else
-      Rails.logger.error "[WeatherAPI] Unexpected response: #{response.code} - #{response.body}"
       Result.new(success?: false, error: "Unexpected API response: #{response.code}")
     end
   end
 
   def handle_success_response(response, location)
-    Rails.logger.info "[WeatherAPI] Successfully fetched weather data"
+    Rails.logger.info '[WeatherAPI] Successfully fetched weather data'
 
     cache_data = parse_success_response(response).merge(fetched_at: Time.current)
     Rails.cache.write(location.weather_cache_key, cache_data, expires_in: Forecast::CACHE_DURATION)
@@ -105,20 +103,19 @@ class WeatherApiService
   end
 
   def create_or_update_forecast(location, data)
-    attributes = {
+    forecast_attributes = build_forecast_attributes(data)
+
+    location.forecast&.update!(forecast_attributes) || location.create_forecast!(forecast_attributes)
+  end
+
+  def build_forecast_attributes(data)
+    {
       current_temp: data[:current_temp],
       high_temp: data[:high_temp],
       low_temp: data[:low_temp],
       conditions: data[:conditions],
       forecast_timestamp: data[:fetched_at] || Time.current
     }
-
-    if location.forecast
-      location.forecast.update!(attributes)
-      location.forecast
-    else
-      location.create_forecast!(attributes)
-    end
   end
 
   def api_key_error

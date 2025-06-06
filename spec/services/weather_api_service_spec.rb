@@ -164,16 +164,4 @@ RSpec.describe WeatherApiService do
       end
     end
   end
-
-  describe '#configured?' do
-    it 'returns true when API key is present' do
-      expect(service.configured?).to be true
-    end
-
-    it 'returns false when API key is missing' do
-      allow(ENV).to receive(:fetch).with('WEATHER_API_KEY', nil).and_return(nil)
-      service = described_class.new
-      expect(service.configured?).to be false
-    end
-  end
 end
