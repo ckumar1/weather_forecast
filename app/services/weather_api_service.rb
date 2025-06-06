@@ -17,25 +17,27 @@ class WeatherApiService
     return api_key_error unless configured?
     return location_error unless location&.geocoded?
 
-    # First check if  location already has current forecast
-    if location.forecast&.current?
-      Rails.logger.info "[WeatherAPI] Using existing forecast for location #{location.id} (#{location.display_name})"
-      return Result.new(success?: true, forecast: location.forecast, from_cache: true)
-    end
+    fetch_from_existing_forecast(location) ||
+      fetch_from_cache(location) ||
+      fetch_fresh_weather(location)
+  end
 
-    # Then check Rails cache (for locations that don't have current forecasts)
-    cache_key = location.weather_cache_key
-    cached_data = Rails.cache.read(cache_key)
+  private
 
-    if cached_data
-      Rails.logger.info "[WeatherAPI] Cache hit for #{cache_key}"
-      forecast = create_or_update_forecast(location, cached_data)
-      return Result.new(success?: true, forecast:, from_cache: true)
-    end
+  def fetch_from_existing_forecast(location)
+    return unless location.forecast&.current?
 
-    # Make API call if no cache hit happens
-    Rails.logger.info "[WeatherAPI] Cache miss for #{cache_key}"
-    fetch_fresh_weather(location)
+    Rails.logger.info "[WeatherAPI] Using existing forecast for location #{location.id} (#{location.display_name})"
+    Result.new(success?: true, forecast: location.forecast, from_cache: true)
+  end
+
+  def fetch_from_cache(location)
+    cached_data = Rails.cache.read(location.weather_cache_key)
+    return unless cached_data
+
+    Rails.logger.info "[WeatherAPI] Cache hit for #{location.weather_cache_key}"
+    forecast = create_or_update_forecast(location, cached_data)
+    Result.new(success?: true, forecast: forecast, from_cache: true)
   end
 
   def fetch_fresh_weather(location)
@@ -44,14 +46,13 @@ class WeatherApiService
 
     handle_response(response, location)
   rescue Net::ReadTimeout, Net::OpenTimeout => e
+    Rails.logger.error "[WeatherAPI] Request timed out: #{e.message}"
     Result.new(success?: false, error: "Weather API request timed out: #{e.message}")
   end
 
   def configured?
     @api_key.present?
   end
-
-  private
 
   def determine_query_param(location)
     location.zipcode.presence || "#{location.latitude},#{location.longitude}"
@@ -71,21 +72,25 @@ class WeatherApiService
   def handle_response(response, location)
     case response.code
     when 200
-      Rails.logger.info "[WeatherAPI] Successfully fetched weather data for query: #{response.request.last_uri.query}"
-      # Store when data was fetched so we can expire the cache correctly
-      cache_data = parse_success_response(response).merge(fetched_at: Time.current)
-      Rails.cache.write(location.weather_cache_key, cache_data, expires_in: Forecast::CACHE_DURATION)
-
-      forecast = create_or_update_forecast(location, cache_data)
-      Result.new(success?: true, forecast:, from_cache: false)
-
+      handle_success_response(response, location)
     when 401
       Result.new(success?: false, error: 'Invalid API key')
     when 429
       Result.new(success?: false, error: 'API rate limit exceeded')
     else
-      Result.new(success?: false, error: "Unexpected API response: #{response}")
+      Rails.logger.error "[WeatherAPI] Unexpected response: #{response.code} - #{response.body}"
+      Result.new(success?: false, error: "Unexpected API response: #{response.code}")
     end
+  end
+
+  def handle_success_response(response, location)
+    Rails.logger.info "[WeatherAPI] Successfully fetched weather data"
+
+    cache_data = parse_success_response(response).merge(fetched_at: Time.current)
+    Rails.cache.write(location.weather_cache_key, cache_data, expires_in: Forecast::CACHE_DURATION)
+
+    forecast = create_or_update_forecast(location, cache_data)
+    Result.new(success?: true, forecast:, from_cache: false)
   end
 
   def parse_success_response(response)
