@@ -51,6 +51,20 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  # Additional security configurations for production
+  
+  # Enable Host header attack protection
+  config.hosts = [
+    ENV.fetch('ALLOWED_HOST', 'localhost'),  # Set this in production
+  ] if ENV['ALLOWED_HOST'].present?
+
+  # Secure session configuration
+  config.session_store :cookie_store,
+    key: '_weather_forecast_session',
+    secure: true,           # Only send over HTTPS
+    httponly: true,         # Prevent XSS access to session
+    same_site: :strict      # CSRF protection
+
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new(STDOUT)
     .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
