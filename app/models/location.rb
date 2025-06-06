@@ -57,24 +57,23 @@ class Location < ApplicationRecord
   def geocode
     return false unless address.present?
 
-    # Perform the geocoding search
-    results = Geocoder.search(address)
-    result = results.first
+    result = Geocoder.search(address).first
+    return false unless result
 
-    if result
-      # Set coordinates (this is what the original geocode method does)
-      self.latitude = result.latitude
-      self.longitude = result.longitude
+    update_coordinates(result)
+    update_address_components(result)
+    true
+  end
 
-      # Extract address components from the same result without additional API call
-      self.city ||= result.city
-      self.state ||= result.state
-      self.zipcode ||= result.postal_code
-      self.country ||= result.country_code&.upcase
+  def update_coordinates(result)
+    self.latitude = result.latitude
+    self.longitude = result.longitude
+  end
 
-      true
-    else
-      false
-    end
+  def update_address_components(result)
+    self.city ||= result.city
+    self.state ||= result.state
+    self.zipcode ||= result.postal_code
+    self.country ||= result.country_code&.upcase
   end
 end
